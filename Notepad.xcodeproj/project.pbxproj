@@ -8,22 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		1CA3FD9B2059FB37000267E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3FD9A2059FB37000267E6 /* AppDelegate.swift */; };
-		1CA3FD9D2059FB37000267E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3FD9C2059FB37000267E6 /* ViewController.swift */; };
+		1CA3FD9D2059FB37000267E6 /* WriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3FD9C2059FB37000267E6 /* WriteController.swift */; };
 		1CA3FDA02059FB37000267E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3FD9E2059FB37000267E6 /* Main.storyboard */; };
 		1CA3FDA32059FB37000267E6 /* Notepad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3FDA12059FB37000267E6 /* Notepad.xcdatamodeld */; };
 		1CA3FDA52059FB37000267E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3FDA42059FB37000267E6 /* Assets.xcassets */; };
 		1CA3FDA82059FB37000267E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3FDA62059FB37000267E6 /* LaunchScreen.storyboard */; };
+		1CA3FDB42059FD09000267E6 /* NotepadChooserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3FDB32059FD09000267E6 /* NotepadChooserController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1CA3FD972059FB37000267E6 /* Notepad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notepad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CA3FD9A2059FB37000267E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1CA3FD9C2059FB37000267E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1CA3FD9C2059FB37000267E6 /* WriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteController.swift; sourceTree = "<group>"; };
 		1CA3FD9F2059FB37000267E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1CA3FDA22059FB37000267E6 /* Notepad.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Notepad.xcdatamodel; sourceTree = "<group>"; };
 		1CA3FDA42059FB37000267E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1CA3FDA72059FB37000267E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1CA3FDA92059FB37000267E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1CA3FDB32059FD09000267E6 /* NotepadChooserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotepadChooserController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +58,48 @@
 		1CA3FD992059FB37000267E6 /* Notepad */ = {
 			isa = PBXGroup;
 			children = (
-				1CA3FD9A2059FB37000267E6 /* AppDelegate.swift */,
-				1CA3FD9C2059FB37000267E6 /* ViewController.swift */,
-				1CA3FD9E2059FB37000267E6 /* Main.storyboard */,
-				1CA3FDA42059FB37000267E6 /* Assets.xcassets */,
-				1CA3FDA62059FB37000267E6 /* LaunchScreen.storyboard */,
-				1CA3FDA92059FB37000267E6 /* Info.plist */,
-				1CA3FDA12059FB37000267E6 /* Notepad.xcdatamodeld */,
+				1CA3FDB12059FBC5000267E6 /* Controller */,
+				1CA3FDB02059FBB9000267E6 /* View */,
+				1CA3FDAF2059FBA8000267E6 /* Model */,
+				1CA3FDB22059FBD9000267E6 /* Supporting Files */,
 			);
 			path = Notepad;
+			sourceTree = "<group>";
+		};
+		1CA3FDAF2059FBA8000267E6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1CA3FDA12059FB37000267E6 /* Notepad.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1CA3FDB02059FBB9000267E6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1CA3FD9E2059FB37000267E6 /* Main.storyboard */,
+				1CA3FDA62059FB37000267E6 /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1CA3FDB12059FBC5000267E6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				1CA3FD9C2059FB37000267E6 /* WriteController.swift */,
+				1CA3FDB32059FD09000267E6 /* NotepadChooserController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		1CA3FDB22059FBD9000267E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1CA3FDA92059FB37000267E6 /* Info.plist */,
+				1CA3FD9A2059FB37000267E6 /* AppDelegate.swift */,
+				1CA3FDA42059FB37000267E6 /* Assets.xcassets */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,8 +175,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1CA3FDA32059FB37000267E6 /* Notepad.xcdatamodeld in Sources */,
-				1CA3FD9D2059FB37000267E6 /* ViewController.swift in Sources */,
+				1CA3FD9D2059FB37000267E6 /* WriteController.swift in Sources */,
 				1CA3FD9B2059FB37000267E6 /* AppDelegate.swift in Sources */,
+				1CA3FDB42059FD09000267E6 /* NotepadChooserController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +316,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TDD38ER876;
-				INFOPLIST_FILE = Notepad/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Notepad/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.RPSTAM.Notepad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -295,7 +331,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TDD38ER876;
-				INFOPLIST_FILE = Notepad/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Notepad/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.RPSTAM.Notepad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
