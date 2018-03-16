@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D47" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Note" representedClassName="Note" syncable="YES" codeGenerationType="class">
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
-        <relationship name="text" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Text" inverseName="parentNote" inverseEntity="Text" syncable="YES"/>
-    </entity>
-    <entity name="Text" representedClassName="Text" syncable="YES" codeGenerationType="class">
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="parentNote" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Note" inverseName="text" inverseEntity="Note" syncable="YES"/>
     </entity>
     <elements>
         <element name="Note" positionX="-63" positionY="-18" width="128" height="75"/>
-        <element name="Text" positionX="-63" positionY="-9" width="128" height="75"/>
     </elements>
 </model>

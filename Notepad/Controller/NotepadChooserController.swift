@@ -96,7 +96,7 @@ class NotepadChooserController: UITableViewController {
         
         if let indexPath = tableView.indexPathForSelectedRow{
             destinationVC.selectedNote = noteArray[indexPath.row]
-            destinationVC.noteTitle = noteArray[indexPath.row].title
+            destinationVC.selectedNote?.title = noteArray[indexPath.row].title
         }
     }
     
@@ -110,6 +110,7 @@ class NotepadChooserController: UITableViewController {
         }
         tableView.reloadData()
     }
+    
     func loadNotes(){
         let request : NSFetchRequest<Note> = Note.fetchRequest()
         do{
