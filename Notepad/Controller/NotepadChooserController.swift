@@ -11,13 +11,15 @@ import CoreData
 
 class NotepadChooserController: UITableViewController {
 
+    @IBOutlet weak var searchBarOutlet: UISearchBar!
+    
     var noteArray = [Note]()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         loadNotes()
         navigationItem.rightBarButtonItem = editButtonItem
     }
@@ -47,6 +49,7 @@ class NotepadChooserController: UITableViewController {
         return true
     }
  
+    //MARK: Deleting Row Table View Method
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             context.delete(noteArray[indexPath.row])
@@ -58,6 +61,7 @@ class NotepadChooserController: UITableViewController {
     }
  
     
+    //MARK: - Moving Rows Table View Method
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         let movedObject = self.noteArray[fromIndexPath.row]
         noteArray.remove(at: fromIndexPath.row)
@@ -111,11 +115,13 @@ class NotepadChooserController: UITableViewController {
         tableView.reloadData()
     }
     
-    func loadNotes(){
-        let request : NSFetchRequest<Note> = Note.fetchRequest()
+    func loadNotes(with request: NSFetchRequest<Note> = Note.fetchRequest(), predicate: NSPredicate? = nil){
+        if predicate != nil{
+            request.predicate = predicate
+        }
         do{
            noteArray = try context.fetch(request)
-        print(noteArray)
+            print(noteArray)
         }
         catch{
             print("Error while fetching Note Data \(error)")
@@ -123,5 +129,29 @@ class NotepadChooserController: UITableViewController {
         tableView.reloadData()
     }
 
+}
+
+//MARK: - Search Query
+extension NotepadChooserController : UISearchBarDelegate{
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request : NSFetchRequest<Note> = Note.fetchRequest()
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        loadNotes(with: request, predicate: predicate)
+        print("Called")
+        
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0{
+            loadNotes()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
 }
 
