@@ -7,21 +7,24 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class NotepadChooserController: UITableViewController {
 
     @IBOutlet weak var searchBarOutlet: UISearchBar!
     
-    var noteArray = [Note]()
+    let realm = try! Realm()
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var noteArray : Results<Note>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadNotes()
         navigationItem.rightBarButtonItem = editButtonItem
+    }
+    override func viewDidAppear(_ animated: Bool) {
+         loadNotes()
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,14 +36,14 @@ class NotepadChooserController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       
-        return noteArray.count
+        return noteArray?.count ?? 1
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath)
 
-        cell.textLabel?.text = noteArray[indexPath.row].title
+        cell.textLabel?.text = noteArray?[indexPath.row].title ?? "No Notes Added Yet"
+        print(cell.textLabel?.text)
 
         return cell
     }
@@ -51,22 +54,27 @@ class NotepadChooserController: UITableViewController {
  
     //MARK: Deleting Row Table View Method
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            context.delete(noteArray[indexPath.row])
-            noteArray.remove(at: indexPath.row)
+        if editingStyle == .delete  && noteArray != nil{
+            do{
+                try realm.write {
+                    realm.delete(noteArray![indexPath.row])
+                }
+            }
+            catch{
+                print("Error while deleting Notes \(error)")
+            }
             tableView.deleteRows(at: [indexPath], with: .fade)
-            saveNotes()
         }
             
     }
  
     
     //MARK: - Moving Rows Table View Method
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-        let movedObject = self.noteArray[fromIndexPath.row]
-        noteArray.remove(at: fromIndexPath.row)
-        noteArray.insert(movedObject, at: to.row)
-    }
+//    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+//        let movedObject = self.noteArray[fromIndexPath.row]
+//        noteArray.remove(at: fromIndexPath.row)
+//        noteArray.insert(movedObject, at: to.row)
+//    }
     
     //MARK: - Add Button
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -75,13 +83,18 @@ class NotepadChooserController: UITableViewController {
         let alert = UIAlertController(title: "Add New Note", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "New Note", style: .default) { (action) in
-            let newNote = Note(context: self.context)
             
-            newNote.title = textfield.text!
-    
-            self.noteArray.append(newNote)
-            
-            self.saveNotes()
+            do{
+                try self.realm.write {
+                    let newNote = Note()
+                    newNote.title = textfield.text!
+                    self.realm.add(newNote)
+                }
+            }
+            catch{
+                print("Error while saving Note \(error)")
+            }
+            self.tableView.reloadData()
         }
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Name the Note"
@@ -99,33 +112,15 @@ class NotepadChooserController: UITableViewController {
         let destinationVC = segue.destination as! WriteController
         
         if let indexPath = tableView.indexPathForSelectedRow{
-            destinationVC.selectedNote = noteArray[indexPath.row]
-            destinationVC.selectedNote?.title = noteArray[indexPath.row].title
+            destinationVC.selectedNote = noteArray?[indexPath.row]
         }
     }
     
     //MARK: - Save and Load Notes Methods
-    func saveNotes(){
-        do{
-            try context.save()
-        }
-        catch{
-            print("Error while saving data \(error)")
-        }
-        tableView.reloadData()
-    }
-    
-    func loadNotes(with request: NSFetchRequest<Note> = Note.fetchRequest(), predicate: NSPredicate? = nil){
-        if predicate != nil{
-            request.predicate = predicate
-        }
-        do{
-           noteArray = try context.fetch(request)
-            print(noteArray)
-        }
-        catch{
-            print("Error while fetching Note Data \(error)")
-        }
+    func loadNotes(){
+       
+        noteArray = realm.objects(Note.self).sorted(byKeyPath: "dateLastUsed", ascending: false)
+        
         tableView.reloadData()
     }
 
@@ -135,14 +130,9 @@ class NotepadChooserController: UITableViewController {
 extension NotepadChooserController : UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request : NSFetchRequest<Note> = Note.fetchRequest()
         
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        loadNotes(with: request, predicate: predicate)
-        print("Called")
-        
+        noteArray?.filter("title CONTAINS [cd] %@", searchBar.text!).sorted(byKeyPath: "dateLastUsed", ascending: false)
+        tableView.reloadData()
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0{

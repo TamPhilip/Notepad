@@ -8,13 +8,14 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 class WriteController: UIViewController, UITextViewDelegate{
 
     //MARK: Outlet and Variable Initialization
     @IBOutlet weak var textView: UITextView!
 
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
     
     var selectedNote : Note?
     
@@ -25,7 +26,7 @@ class WriteController: UIViewController, UITextViewDelegate{
         //Observer Keyboard Setup
         NotificationCenter.default.addObserver(self, selector: #selector(WriteController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(WriteController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-
+        
         //Textview Delegate
         textView.delegate = self
         
@@ -41,17 +42,7 @@ class WriteController: UIViewController, UITextViewDelegate{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    //MARK: Save and Load Text Methods
-    func saveText(){
-        do{
-            try context.save()
-        }
-        catch{
-            print("Error while saving context \(error)")
-        }
-    }
-    
+
     //MARK: Keyboard Shown and Hide Methods
     @objc func keyboardWillShow(notification: NSNotification){
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue{
@@ -67,12 +58,23 @@ class WriteController: UIViewController, UITextViewDelegate{
     //MARK: Remove Observer after WriterCOntroller is gone
     override func viewDidDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
-        saveText()
+         saveText()
     }
     
     //Saving Text
     func textViewDidChange(_ textView: UITextView) {
-        selectedNote!.text = textView.text
-
+       
+    }
+    
+    func saveText(){
+        do{
+            try realm.write{
+                selectedNote?.text = textView.text
+                selectedNote?.dateLastUsed = Date.init()
+            }
+        }
+        catch{
+            print("Error while saving text \(error)")
+        }
     }
 }
